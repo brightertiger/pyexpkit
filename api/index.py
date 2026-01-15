@@ -5,11 +5,7 @@ from pydantic import BaseModel, Field
 from typing import Literal, Optional, List
 from mangum import Mangum
 
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from pyexptest.effects.outcome import conversion, magnitude, timing
+from pyexptest import conversion, magnitude, timing
 
 app = FastAPI(
     title="pyexptest API",
