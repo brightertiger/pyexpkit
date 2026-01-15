@@ -166,12 +166,12 @@ class TimingRateAnalyzeRequest(BaseModel):
     confidence: int = Field(95, ge=80, le=99)
 
 
-@app.get("/api/health")
+@app.get("/health")
 def health_check():
     return {"status": "healthy", "version": "0.1.0"}
 
 
-@app.post("/api/conversion/sample-size")
+@app.post("/conversion/sample-size")
 def conversion_sample_size(request: ConversionSampleSizeRequest):
     try:
         rate = request.current_rate
@@ -203,7 +203,7 @@ def conversion_sample_size(request: ConversionSampleSizeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/conversion/analyze")
+@app.post("/conversion/analyze")
 def conversion_analyze(request: ConversionAnalyzeRequest):
     try:
         result = conversion.analyze(
@@ -230,7 +230,7 @@ def conversion_analyze(request: ConversionAnalyzeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/conversion/analyze-multi")
+@app.post("/conversion/analyze-multi")
 def conversion_analyze_multi(request: ConversionMultiAnalyzeRequest):
     try:
         variants = [{"name": v.name, "visitors": v.visitors, "conversions": v.conversions} for v in request.variants]
@@ -274,7 +274,7 @@ def conversion_analyze_multi(request: ConversionMultiAnalyzeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/conversion/analyze-multi/summary", response_class=PlainTextResponse)
+@app.post("/conversion/analyze-multi/summary", response_class=PlainTextResponse)
 def conversion_analyze_multi_summary(request: ConversionMultiAnalyzeRequest):
     try:
         variants = [{"name": v.name, "visitors": v.visitors, "conversions": v.conversions} for v in request.variants]
@@ -284,7 +284,7 @@ def conversion_analyze_multi_summary(request: ConversionMultiAnalyzeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/conversion/analyze/summary", response_class=PlainTextResponse)
+@app.post("/conversion/analyze/summary", response_class=PlainTextResponse)
 def conversion_analyze_summary(request: ConversionAnalyzeRequest):
     try:
         result = conversion.analyze(
@@ -299,7 +299,7 @@ def conversion_analyze_summary(request: ConversionAnalyzeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/conversion/sample-size/summary", response_class=PlainTextResponse)
+@app.post("/conversion/sample-size/summary", response_class=PlainTextResponse)
 def conversion_sample_size_summary(request: ConversionSampleSizeRequest):
     try:
         rate = request.current_rate
@@ -313,7 +313,7 @@ def conversion_sample_size_summary(request: ConversionSampleSizeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/conversion/confidence-interval")
+@app.post("/conversion/confidence-interval")
 def conversion_confidence_interval(request: ConversionConfidenceIntervalRequest):
     try:
         result = conversion.confidence_interval(visitors=request.visitors, conversions=request.conversions, confidence=request.confidence)
@@ -322,7 +322,7 @@ def conversion_confidence_interval(request: ConversionConfidenceIntervalRequest)
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/magnitude/sample-size")
+@app.post("/magnitude/sample-size")
 def magnitude_sample_size(request: MagnitudeSampleSizeRequest):
     try:
         plan = magnitude.sample_size(current_mean=request.current_mean, current_std=request.current_std, lift_percent=request.lift_percent, confidence=request.confidence, power=request.power, num_variants=request.num_variants)
@@ -343,7 +343,7 @@ def magnitude_sample_size(request: MagnitudeSampleSizeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/magnitude/analyze")
+@app.post("/magnitude/analyze")
 def magnitude_analyze(request: MagnitudeAnalyzeRequest):
     try:
         result = magnitude.analyze(
@@ -371,7 +371,7 @@ def magnitude_analyze(request: MagnitudeAnalyzeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/magnitude/analyze-multi")
+@app.post("/magnitude/analyze-multi")
 def magnitude_analyze_multi(request: MagnitudeMultiAnalyzeRequest):
     try:
         variants = [{"name": v.name, "visitors": v.visitors, "mean": v.mean, "std": v.std} for v in request.variants]
@@ -403,7 +403,7 @@ def magnitude_analyze_multi(request: MagnitudeMultiAnalyzeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/magnitude/analyze-multi/summary", response_class=PlainTextResponse)
+@app.post("/magnitude/analyze-multi/summary", response_class=PlainTextResponse)
 def magnitude_analyze_multi_summary(request: MagnitudeMultiAnalyzeRequest):
     try:
         variants = [{"name": v.name, "visitors": v.visitors, "mean": v.mean, "std": v.std} for v in request.variants]
@@ -413,7 +413,7 @@ def magnitude_analyze_multi_summary(request: MagnitudeMultiAnalyzeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/magnitude/analyze/summary", response_class=PlainTextResponse)
+@app.post("/magnitude/analyze/summary", response_class=PlainTextResponse)
 def magnitude_analyze_summary(request: MagnitudeAnalyzeRequest):
     try:
         result = magnitude.analyze(
@@ -426,7 +426,7 @@ def magnitude_analyze_summary(request: MagnitudeAnalyzeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/magnitude/sample-size/summary", response_class=PlainTextResponse)
+@app.post("/magnitude/sample-size/summary", response_class=PlainTextResponse)
 def magnitude_sample_size_summary(request: MagnitudeSampleSizeRequest):
     try:
         plan = magnitude.sample_size(current_mean=request.current_mean, current_std=request.current_std, lift_percent=request.lift_percent, confidence=request.confidence, power=request.power, num_variants=request.num_variants)
@@ -437,7 +437,7 @@ def magnitude_sample_size_summary(request: MagnitudeSampleSizeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/magnitude/confidence-interval")
+@app.post("/magnitude/confidence-interval")
 def magnitude_confidence_interval(request: MagnitudeConfidenceIntervalRequest):
     try:
         result = magnitude.confidence_interval(visitors=request.visitors, mean=request.mean, std=request.std, confidence=request.confidence)
@@ -446,7 +446,7 @@ def magnitude_confidence_interval(request: MagnitudeConfidenceIntervalRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/conversion/diff-in-diff")
+@app.post("/conversion/diff-in-diff")
 def conversion_diff_in_diff(request: ConversionDiffInDiffRequest):
     try:
         result = conversion.diff_in_diff(
@@ -470,7 +470,7 @@ def conversion_diff_in_diff(request: ConversionDiffInDiffRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/conversion/diff-in-diff/summary", response_class=PlainTextResponse)
+@app.post("/conversion/diff-in-diff/summary", response_class=PlainTextResponse)
 def conversion_diff_in_diff_summary(request: ConversionDiffInDiffRequest):
     try:
         result = conversion.diff_in_diff(
@@ -485,7 +485,7 @@ def conversion_diff_in_diff_summary(request: ConversionDiffInDiffRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/magnitude/diff-in-diff")
+@app.post("/magnitude/diff-in-diff")
 def magnitude_diff_in_diff(request: MagnitudeDiffInDiffRequest):
     try:
         result = magnitude.diff_in_diff(
@@ -510,7 +510,7 @@ def magnitude_diff_in_diff(request: MagnitudeDiffInDiffRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/magnitude/diff-in-diff/summary", response_class=PlainTextResponse)
+@app.post("/magnitude/diff-in-diff/summary", response_class=PlainTextResponse)
 def magnitude_diff_in_diff_summary(request: MagnitudeDiffInDiffRequest):
     try:
         result = magnitude.diff_in_diff(
@@ -525,7 +525,7 @@ def magnitude_diff_in_diff_summary(request: MagnitudeDiffInDiffRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/timing/analyze")
+@app.post("/timing/analyze")
 def timing_analyze(request: TimingAnalyzeRequest):
     try:
         result = timing.analyze(
@@ -547,7 +547,7 @@ def timing_analyze(request: TimingAnalyzeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/timing/sample-size")
+@app.post("/timing/sample-size")
 def timing_sample_size(request: TimingSampleSizeRequest):
     try:
         plan = timing.sample_size(
@@ -564,7 +564,7 @@ def timing_sample_size(request: TimingSampleSizeRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/timing/survival-curve")
+@app.post("/timing/survival-curve")
 def timing_survival_curve(request: TimingSurvivalCurveRequest):
     try:
         curve = timing.survival_curve(times=request.times, events=request.events, confidence=request.confidence)
@@ -577,7 +577,7 @@ def timing_survival_curve(request: TimingSurvivalCurveRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/timing/rates/analyze")
+@app.post("/timing/rates/analyze")
 def timing_rate_analyze(request: TimingRateAnalyzeRequest):
     try:
         result = timing.analyze_rates(
